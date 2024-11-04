@@ -1,85 +1,104 @@
-// eslint-disable-next-line no-unused-vars
-import React from 'react';
-import logo from '../assets/images/download.jpeg'
+import { useState, useEffect } from 'react';
+import Activities from './Advet';
+import Home from './Home';
 
-const Navbar = () => {
+const NavbarWithBackground = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentBackground, setCurrentBackground] = useState(0);
+
+  // List of background images
+  const backgroundImages = [
+    'https://www.theasianschool.net/blog/wp-content/uploads/2018/10/St.-Xaviers-Collegiate-School-Kolkata.jpg',
+    'https://blog.boardingschoolsofindia.com/wp-content/uploads/2024/07/The-Doon-School.webp',
+    'https://candidschools.com/wp-content/uploads/2024/08/4-1-1024x576.jpg'
+  ];
+
+  // Function to toggle menu on mobile
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  // Automatically change background image every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBackground((prev) => (prev + 1) % backgroundImages.length);
+    }, 5000); // Change image every 5 seconds
+    return () => clearInterval(interval);
+  }, [backgroundImages.length]);
+
   return (
-    <header className="bg-gradient-to-r from-blue-800 to-purple-800 text-white">
-      <div className="container mx-auto flex justify-between items-center py-2 px-4">
-        {/* Contact Information */}
-        <div className="text-sm">
-          <span>info@apsarapublicschool.com | +91-4994-237222</span>
-        </div>
-        {/* Login/Register */}
-        <div className="text-sm">
-          <a href="#login" className="hover:underline">
-            Login
-          </a>
-          <span> / </span>
-          <a href="#register" className="hover:underline">
-            Register
-          </a>
-        </div>
+    <div className="relative w-full h-screen">
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center transition-opacity duration-500"
+        style={{
+          backgroundImage: `url(${backgroundImages[currentBackground]})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center',
+          height: '100%',
+          width: '100%',
+        }}
+      >
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black opacity-50"></div>
       </div>
-      <nav className="bg-white shadow-md">
-        <div className="container mx-auto flex justify-between items-center py-4 px-4">
-          {/* Logo */}
-          <a href="/" className="flex items-center">
-            <img src={logo} alt="Logo" className="h-10 mr-2" />
-            <span className="font-bold text-lg text-gray-700">KSD Public School</span>
-          </a>
-          {/* Nav Links */}
-          <ul className="flex space-x-6 text-gray-700 font-semibold">
-            <li>
-              <a href="#home" className="hover:text-blue-600">
-                Home
-              </a>
-            </li>
-            <li>
-              <a href="#about-us" className="hover:text-blue-600">
-                About Us
-              </a>
-            </li>
-            <li>
-              <a href="#apsara" className="hover:text-blue-600">
-                Apsara
-              </a>
-            </li>
-            <li>
-              <a href="#admission" className="hover:text-blue-600">
-                Admission
-              </a>
-            </li>
-            <li>
-              <a href="#academics" className="hover:text-blue-600">
-                Academics
-              </a>
-            </li>
-            <li>
-              <a href="#beyond-academics" className="hover:text-blue-600">
-                Beyond Academics
-              </a>
-            </li>
-            <li>
-              <a href="#gallery" className="hover:text-blue-600">
-                Gallery
-              </a>
-            </li>
-            <li>
-              <a href="#career" className="hover:text-blue-600">
-                Career
-              </a>
-            </li>
-            <li>
-              <a href="#contact" className="hover:text-blue-600">
-                Contact
-              </a>
-            </li>
-          </ul>
+
+      {/* Navbar */}
+      <div className="relative z-10 flex items-center justify-between px-8 py-4">
+        <div className="text-white text-2xl font-bold">My Logo</div>
+        <div className="space-x-8 text-white text-lg hidden md:flex">
+          {['Home', 'About', 'Services', 'Career', 'Admission', 'Contact', 'Login', 'Register'].map((item) => (
+            <a
+              href={`#${item.toLowerCase()}`}
+              key={item}
+              className="hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ease-in-out"
+            >
+              {item}
+            </a>
+          ))}
         </div>
-      </nav>
-    </header>
+
+        {/* Hamburger Menu Icon */}
+        <button
+          className="text-white text-2xl md:hidden"
+          onClick={toggleMenu}
+        >
+          &#9776;
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-80 flex flex-col items-center justify-center space-y-8 text-white text-lg z-20 md:hidden">
+          {['Home', 'About', 'Services', 'Career', 'Admission', 'Contact', 'Login', 'Register'].map((item) => (
+            <a
+              href={`#${item.toLowerCase()}`}
+              key={item}
+              className="hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ease-in-out"
+              onClick={toggleMenu}
+            >
+              {item}
+            </a>
+          ))}
+          <button
+            className="text-xl font-bold absolute top-4 right-4"
+            onClick={toggleMenu}
+          >
+            &#10005; {/* Close icon */}
+          </button>
+        </div>
+      )}
+
+      {/* Main Content */}
+      <div className="relative z-10 flex items-center justify-center h-full">
+        <h1 className="text-white text-4xl md:text-6xl font-bold text-center">
+          Welcome to Aliya Public School
+        </h1>
+      </div>
+  <Activities/>
+  <Home/>
+    </div>
   );
 };
 
-export default Navbar;
+export default NavbarWithBackground;
