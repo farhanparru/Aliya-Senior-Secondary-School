@@ -96,7 +96,7 @@ const NavbarWithBackground = () => {
         </h1>
       </div>
   <Activities/>
-  <Home/>
+
     </div>
   );
 };
