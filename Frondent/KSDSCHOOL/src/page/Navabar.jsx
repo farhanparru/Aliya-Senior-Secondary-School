@@ -10,106 +10,196 @@ import Footer from './Footer';
 const NavbarWithBackground = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentBackground, setCurrentBackground] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
 
-  // List of background images
-  const backgroundImages = [
-    'https://www.theasianschool.net/blog/wp-content/uploads/2018/10/St.-Xaviers-Collegiate-School-Kolkata.jpg',
-    'https://blog.boardingschoolsofindia.com/wp-content/uploads/2024/07/The-Doon-School.webp',
-    'https://candidschools.com/wp-content/uploads/2024/08/4-1-1024x576.jpg'
-  ];
-
-  // Function to toggle menu on mobile
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  // UAE-inspired color scheme
+  const colors = {
+    primary: '#0C4DA2', // UAE flag blue
+    secondary: '#E30A17', // UAE flag red
+    accent: '#FFD700', // Gold accent
+    light: '#F5F5F5',
+    dark: '#222222'
   };
 
-  // Automatically change background image every 5 seconds
+  // UAE-relevant background images
+  const backgroundImages = [
+    'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    'https://images.unsplash.com/photo-1517825738774-7de9363ef735?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+  ];
+
+  // UAE-appropriate navigation items
+  const navItems = [
+    { name: 'Home', path: '#home' },
+    { name: 'About', path: '#about' },
+    { name: 'Academics', path: '#academics' },
+    { name: 'Admission', path: '#admission' },
+    { name: 'School Life', path: '#life' },
+    { name: 'News', path: '#news' },
+    { name: 'Contact', path: '#contact' }
+  ];
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentBackground((prev) => (prev + 1) % backgroundImages.length);
     }, 5000);
-    return () => clearInterval(interval);
+
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [backgroundImages.length]);
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
-    <div className="relative w-full h-screen">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center transition-opacity duration-500"
-        style={{
-          backgroundImage: `url(${backgroundImages[currentBackground]})`,
-          height: '100%',
-          width: '100%',
-        }}
-      >
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black opacity-60"></div>
-      </div>
-
-      {/* Navbar */}
-      <div className="relative z-10 flex items-center justify-between px-6 py-4 md:px-8">
-        <img src={logo} alt="School Logo" className="h-10 md:h-12" />
-        
-        <div className="space-x-4 md:space-x-8 text-white text-sm md:text-lg hidden md:flex">
-          {['Home', 'About', 'Services', 'Career', 'Admission', 'Contact', 'Login', 'Register'].map((item) => (
-            <a
-              href={`#${item.toLowerCase()}`}
-              key={item}
-              className="hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ease-in-out"
-            >
-              {item}
-            </a>
-          ))}
-        </div>
-
-        {/* Hamburger Menu Icon */}
-        <button
-          className="text-white text-2xl md:hidden"
-          onClick={toggleMenu}
+    <div className="relative w-full">
+      {/* Hero Section with Background */}
+      <div className="relative w-full h-screen">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000"
+          style={{
+            backgroundImage: `url(${backgroundImages[currentBackground]})`,
+            height: '100%',
+            width: '100%',
+          }}
         >
-          &#9776;
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-80 flex flex-col items-center justify-center space-y-8 text-white text-lg z-20 md:hidden">
-          {['Home', 'About', 'Services', 'Career', 'Admission', 'Contact', 'Login', 'Register'].map((item) => (
-            <a
-              href={`#${item.toLowerCase()}`}
-              key={item}
-              className="hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ease-in-out"
-              onClick={toggleMenu}
-            >
-              {item}
-            </a>
-          ))}
-          <button
-            className="text-xl font-bold absolute top-4 right-4"
-            onClick={toggleMenu}
-          >
-            &#10005; {/* Close icon */}
-          </button>
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0C4DA2] to-[#0C4DA2]/70"></div>
         </div>
-      )}
 
-      {/* Main Content */}
-      <div className="relative z-10 flex items-center justify-center h-full px-4">
-        <h1 className="text-white text-3xl md:text-6xl font-bold text-center">
-          Welcome to Aliya Senior Secondary School
-        </h1>
-      </div>
-      
-      {/* Additional Components */}
-      <div className="relative z-10">
-        <Activities />
-        <Home />
-        <Mangments/>
-        <Principle/>
-        <Gallery/>
+        {/* Navbar */}
+        <header className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg py-2' : 'bg-transparent py-4'}`}>
+          <div className="container mx-auto px-6 flex items-center justify-between">
+            <div className="flex items-center">
+              <img 
+                src={logo} 
+                alt="School Logo" 
+                className={`h-12 transition-all duration-300 ${scrolled ? 'filter brightness(0)' : ''}`} 
+              />
+              {scrolled && (
+                <h1 className="ml-4 text-xl font-bold" style={{ color: colors.primary }}>
+                  Aliya Senior Secondary School
+                </h1>
+              )}
+            </div>
+            
+            <nav className="hidden md:flex items-center space-x-8">
+              {navItems.map((item) => (
+                <a
+                  href={item.path}
+                  key={item.name}
+                  className={`font-medium transition-all duration-300 ${scrolled ? 'text-gray-800 hover:text-blue-600' : 'text-white hover:text-yellow-300'}`}
+                >
+                  {item.name}
+                </a>
+              ))}
+              <button 
+                className="px-6 py-2 rounded-full font-bold text-white"
+                style={{ backgroundColor: colors.secondary }}
+              >
+                Apply Now
+              </button>
+            </nav>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="text-2xl md:hidden"
+              onClick={toggleMenu}
+              style={{ color: scrolled ? colors.primary : 'white' }}
+            >
+              {isMenuOpen ? '✕' : '☰'}
+            </button>
+          </div>
+        </header>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div 
+            className="fixed inset-0 bg-white z-40 flex flex-col items-center justify-center space-y-8 pt-20"
+            style={{ marginTop: '0' }}
+          >
+            {navItems.map((item) => (
+              <a
+                href={item.path}
+                key={item.name}
+                className="text-2xl font-medium"
+                style={{ color: colors.primary }}
+                onClick={toggleMenu}
+              >
+                {item.name}
+              </a>
+            ))}
+            <button 
+              className="px-8 py-3 rounded-full font-bold text-white mt-4"
+              style={{ backgroundColor: colors.secondary }}
+            >
+              Apply Now
+            </button>
+          </div>
+        )}
+
+        {/* Hero Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center container mx-auto">
+          <h1 
+            className="text-white text-4xl md:text-6xl font-bold mb-6"
+            style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}
+          >
+            Excellence in Education <br/> 
+            <span style={{ color: colors.accent }}>UAE-Inspired Learning</span>
+          </h1>
+          <p className="text-white text-xl md:text-2xl mb-8 max-w-2xl">
+            Preparing future leaders with a curriculum that combines academic excellence and UAE cultural values
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button 
+              className="px-8 py-3 rounded-full font-bold text-white"
+              style={{ backgroundColor: colors.secondary }}
+            >
+              Explore Programs
+            </button>
+            <button 
+              className="px-8 py-3 rounded-full font-bold"
+              style={{ 
+                backgroundColor: 'transparent',
+                border: `2px solid ${colors.accent}`,
+                color: colors.accent
+              }}
+            >
+              Virtual Tour
+            </button>
+          </div>
+        </div>
+
         
-        <Footer/>
-       
+      </div>
+
+      {/* Main Content Sections */}
+      <div className="relative z-10 bg-white">
+        <Home colors={colors} />
+        <Activities colors={colors} />
+        <Mangments colors={colors} />
+        <Principle colors={colors} />
+        <Gallery colors={colors} />
+        <Footer colors={colors} />
+      </div>
+
+      {/* Floating Action Button */}
+      <div className="fixed bottom-8 right-8 z-50">
+        <button 
+          className="w-16 h-16 rounded-full flex items-center justify-center shadow-xl animate-bounce"
+          style={{ backgroundColor: colors.secondary }}
+        >
+          <i className="fas fa-comment-alt text-white text-2xl"></i>
+        </button>
       </div>
     </div>
   );
