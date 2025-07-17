@@ -6,6 +6,7 @@ import Mangments from './Mangments';
 import Principle from './Principle';
 import Gallery from './Gallry';
 import Footer from './Footer';
+import UAE_Chatbot from './UAE_Chatbot';
 
 const NavbarWithBackground = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -178,8 +179,6 @@ const NavbarWithBackground = () => {
             </button>
           </div>
         </div>
-
-        
       </div>
 
       {/* Main Content Sections */}
@@ -192,15 +191,8 @@ const NavbarWithBackground = () => {
         <Footer colors={colors} />
       </div>
 
-      {/* Floating Action Button */}
-      <div className="fixed bottom-8 right-8 z-50">
-        <button 
-          className="w-16 h-16 rounded-full flex items-center justify-center shadow-xl animate-bounce"
-          style={{ backgroundColor: colors.secondary }}
-        >
-          <i className="fas fa-comment-alt text-white text-2xl"></i>
-        </button>
-      </div>
+      {/* UAE Chatbot Component */}
+      <UAE_Chatbot colors={colors} />
     </div>
   );
 };
